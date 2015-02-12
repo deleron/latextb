@@ -1,0 +1,24 @@
+\cleardoublepage % little hack for moving the side marker down
+\stepcounter{fchapter}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter*{Publications}
+\addstarredchapter{Publications}
+\chaptermark{Publications}
+
+\begin{refsection}
+
+%% Articles
+\nocite{test2010}
+
+\printbibliography[keyword=own,type=article,
+  heading=subbibliography,
+  title={Articles}]
+
+%% Talks
+\nocite{misc2002}
+
+\printbibliography[keyword=own,keyword=talk,
+  heading=subbibliography,
+  title={Invited talk}]
+
+\end{refsection}

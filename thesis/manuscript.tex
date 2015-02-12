@@ -1,0 +1,84 @@
+\documentclass[12pt,gitinfo,twoside,a4paper,booklet]{isirthesis}
+% If you do not use git remove gitinfo option
+
+%% Bibliography
+\addbibresource{thesis.bib}
+
+%% Front page
+% \coverimage{fig/background} % Use to add a cover image
+\logos{
+  \includegraphics[width=1.5cm]{fig/logo1.eps}
+  \hfill
+  \includegraphics[width=1.5cm]{fig/logo2.eps}
+  \hfill
+  \includegraphics[width=1.5cm]{fig/logo3.eps}
+}
+
+\usepackage{lipsum}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Main infos
+\title{FIXME - Thesis title}
+\subtitle{FIXME - Optional subtitle}
+\date{FIXME - Date}
+\keywords{FIXME - keywords}
+\author{Author \textsc{Name}}
+\email{author.name@school.fr}
+
+%% Doctoral School
+\university{FIXME - Name of the University}
+\school{FIXME - doctoral school}
+\laboratory{FIXME - laboratory / research team}
+\speciality{FIXME - speciality}
+
+\jury{
+  \href{mailto:name.a@school.fr}{Pr. Name A}
+    -- \href{http://www.school.fr}{School} & role \\
+  \href{mailto:name.b@school.fr}{PhD. Name B}
+    -- \href{http://www.school.fr}{University} & role \\
+  \href{mailto:name.c@school.fr}{Name C}
+    -- \href{http://www.school.fr}{School} & role \\
+}
+
+%% General infos
+\keywordstext{
+  FIXME - Keywords text
+}
+
+\infostext{
+  FIXME - OPTIONAL - Infos text
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{src/glossary}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\dominitoc % required to use minitoc
+
+\input{src/abstract}
+
+\input{src/acknowledgements}
+
+\tableofcontents
+
+\listoffigures
+\addstarredchapter{\listfigurename}
+
+\listoftables
+\addstarredchapter{\listtablename}
+
+\input{src/content}
+
+%%%%%
+\renewcommand{\bibfont}{\small}
+\printbibliography[notkeyword=unbib]
+
+%%%%%
+\tableofglossaries
+
+%%%%%
+\tableofindex
+
+\end{document}

@@ -1,0 +1,43 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Examples on how to use index/glossary
+%% /!\ Make sure to use make && make glossary (or make full)
+
+%% Indexed entries
+\newglossaryentry{entry}{
+  name={entry},
+  description={Entry's description.}
+}
+\newglossaryentry{yaentry}{
+  name={yaentry},
+  description={Entry's description.}
+}
+\newglossaryentry{snentry}{
+  name={snentry},
+  description={Entry's description.}
+}
+\newglossaryentry{smentry}{
+  name={smentry},
+  description={}
+  % with an empty description, the term shows in the index but not the glossary
+}
+
+%% Acronyms (are also indexed)
+\newacronym{ACRO}{ACRO}{A.C.R.O.N.Y.M}
+\newacronym{YAACRO}{YAACRO}{Yet Another Acronym.}
+
+%% Easy way to use entries
+\newcommand{\entry}{\gls{entry}\xspace}
+\newcommand{\yaentry}{\gls{yaentry}\xspace}
+\newcommand{\snentry}{\gls{snentry}\xspace}
+\newcommand{\smentry}{\gls{smentry}\xspace}
+\newcommand{\acro}{\gls{ACRO}\xspace}
+\newcommand{\yaacro}{\gls{YAACRO}\xspace}
+
+% \gls : singular form of entry
+% \glspl : plural form of entry
+% \Gls : singular form of entry (with Upper case first letter)
+% \Glspl : plural form of entry (with Upper case first letter)
+
+% \acrshort : print "<abbrv>" version of acronym
+% \acrlong : print "<full>" version of acronym
+% \acrfull : print both "<full> (abbrv)" versions of acronym

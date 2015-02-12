@@ -1,0 +1,32 @@
+#!/bin/sh
+# This file is adapted from the file 'vc' from the vc bundle for TeX.
+# The original file can be found at CTAN:support/vc.
+# It was extended to check the availability of gawk command
+# This file is Public Domain.
+
+# Parse command line options.
+full=0
+mod=0
+while [ -n "$(echo $1 | grep '-')" ]; do
+    case $1 in 
+       -f ) full=1 ;;
+       -m ) mod=1 ;;
+       *  ) echo 'usage: vc [-f] [-m]'
+            exit 1
+    esac
+    shift
+done
+# English locale.
+LC_ALL=C
+COMMAND=gawk
+if `$COMMAND --version >/dev/null 2>&1`; then
+  git --no-pager log -1 HEAD --pretty=format:"Hash: %H%nAbr. Hash: %h%nParent Hashes: %P%nAbr. Parent Hashes: %p%nAuthor Name: %an%nAuthor Email: %ae%nAuthor Date: %ai%nCommitter Name: %cn%nCommitter Email: %ce%nCommitter Date: %ci%n" |$COMMAND -v script=log -v full=$full -f $PWD/bin/vc-git.awk > vc.info
+  if [ "$mod" = 1 ]
+  then
+    git status |$COMMAND -v script=status -f $PWD/bin/vc-git.awk >> vc.info
+  fi
+else
+  cat $PWD/bin/vc.gawk.missing.tex >> vc.info
+fi
+
+

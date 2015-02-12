@@ -1,0 +1,6 @@
+*.pdf
+!*/*.pdf
+genfigures/*.eps
+tmp.t2d
+tmp.t2d.diff
+vc.info
