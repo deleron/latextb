@@ -1,0 +1,55 @@
+\documentclass[12pt]{article}
+
+\usepackage[english]{babel}
+
+\usepackage{htabular}
+
+%%%% document
+\begin{document}
+
+%% Instead of using "~" in empty cells (to mark separations),
+%% You can add to the listing/.style 'execute at empty cell={~}
+%% I find it easier to fill the tabular when 'seeing the separations'
+  
+%% code
+
+\newcommand{\gen}[1]{
+  \begin{figure}
+    \begin{htabular}[#1]
+	%% Headers
+	% leave the first cell empty
+	  \& ~
+	  \& \h{Phenomenon A}
+	  \& \h{Long Phenomenon B}
+	  \& \h{Long Phenomenon C}
+	  \& \h{Phenomenon D}
+	  \& ~
+	  \& \h{Another Phenomenon E}
+	  \& \h{Another Phenomenon F}
+	  \& \h{Another Phenomenon G}
+	  \& ~
+	  \& \h{Bonus}
+	  \\
+	%% Fill the tabular
+	\la{Entry A}    	\&~\& \y \& \y \& \y \& \m \&~\& \m \& \m \& \n \&~\& \m\\
+	\la{Entry B}    	\&~\& \y \& \y \& \y \& \m \&~\& \m \& \m \& \m \&~\& \m\\
+	\la{Entry C}    	\&~\& \y \& \n \& \y \& \m \&~\& \m \& \m \& \y \&~\& \m\\
+	\la{Long Entry D}	\&~\& \y \& \y \& \n \& \m \&~\& \y \& \m \& \n \&~\& \y\\
+	\la{Long Entry E}	\&~\& \y \& \y \& \y \& \m \&~\& \m \& \m \& \n \&~\& \m\\
+    \end{htabular}
+    \caption{Options : [#1]}
+  \end{figure}
+}
+
+\gen{}
+\gen{colors}
+\gen{colors,minimum cell size=3em}
+\gen{colors,minimum label width=4cm}
+\gen{colors,minimum header width=5cm}
+\gen{colors,minimum cell size=2.5em,minimum label width=4cm,minimum header width=5cm}
+
+It is also possible to use the keywords `postaction` and `preaction` as
+in tikz packages.
+  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}

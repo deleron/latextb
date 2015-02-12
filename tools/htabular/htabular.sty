@@ -1,0 +1,213 @@
+\NeedsTeXFormat{LaTeX2e}[1994/06/01]
+\ProvidesPackage{htabular}[2011/01/11 v0.01 LaTeX package for nice fancy tabular]
+
+\RequirePackage{environ}
+\RequirePackage{calc}
+\RequirePackage{tikz,pgf}
+\usetikzlibrary{matrix,intersections,calc}
+
+%%%%% Parameters
+\newdimen\htabular@collabwidth %% column label width
+\newdimen\htabular@rowlabwidth %% row label width
+\newdimen\htabular@cellsize %% column (square) size
+\def\htabular@colory{none} %% color of yes cells
+\def\htabular@colorn{none} %% color of no cells
+\def\htabular@colorm{none} %% color of maybe cells
+
+%%%%% Parameters impact
+\pgfkeys{/htabular/minimum header width/.code={\htabular@collabwidth=#1}}
+\pgfkeys{/htabular/minimum header width/.default=0em}
+\pgfkeys{/htabular/minimum label width/.code={\htabular@rowlabwidth=#1}}
+\pgfkeys{/htabular/minimum label width/.default=0em}
+\pgfkeys{/htabular/postaction/.code=\expandafter\def\expandafter\htabular@postactions{#1}}
+\pgfkeys{/htabular/postaction/.default={}}
+\let\htabular@postactions=\pgfutil@empty
+\pgfkeys{/htabular/preaction/.code=\expandafter\def\expandafter\htabular@preactions{#1}}
+\pgfkeys{/htabular/preaction/.default={}}
+\let\htabular@preactions=\pgfutil@empty
+  
+\tikzset{
+  listing/.style = {
+	  matrix of nodes,
+	  row sep=-\pgflinewidth,
+	  column sep=-\pgflinewidth,
+	  nodes={anchor=center},
+	  row 1/.style={nodes={draw=none,minimum size=0,inner sep=0}},
+	  ampersand replacement=\&
+  }
+}
+\tikzset{
+  htabular cell/.style={
+    /htabular/row \the\pgfmatrixcurrentrow/.try,
+    /htabular/column \the\pgfmatrixcurrentcolumn/.try,
+    /htabular/row \the\pgfmatrixcurrentrow\space column
+    \the\pgfmatrixcurrentcolumn/.try
+  }
+}
+
+%% Minimum cell size handling
+\pgfkeys{/htabular/minimum cell size/.code={\pgfmathparse{max(2.5 * \heightof{A},#1)}\htabular@cellsize=\pgfmathresult pt}}
+\pgfkeys{/htabular/minimum cell size/.default=0em}
+
+%% Color handling
+\pgfkeys{/htabular/colory/.code={\def\htabular@colory{#1}}}
+\pgfkeys{/htabular/colorm/.code={\def\htabular@colorm{#1}}}
+\pgfkeys{/htabular/colorn/.code={\def\htabular@colorn{#1}}}
+
+%% Default colors when specifying 'colors' option
+\pgfkeys{/htabular/colors/.style={/htabular/colory={green!20},/htabular/colorn={red!20},/htabular/colorm={gray!20}}}
+
+%%%%% Internals
+\newcounter{htabular@hnum} %% current header number
+\newcounter{htabular@lnum} %% current label number
+\newdimen\htabular@nodewidth
+
+\newdimen\htabular@ly %% temporary buffer for current y coordinate
+\newdimen\htabular@lx %% temporary buffer for current x coordinate
+
+\newdimen\htabular@hmy %% top most coordinate for headers
+\htabular@hmy=0pt
+\newdimen\htabular@hmx %% right most coordinate for headers
+\htabular@hmx=0pt
+\newdimen\htabular@hmd %% maximum width for column headers
+\htabular@hmd=0pt
+\newdimen\htabular@hms %% maximum x shift between right and left letters of column headers
+\htabular@hmd=0pt
+
+\newdimen\htabular@lmx %% right most coordinate for labels
+\htabular@lmx=0pt
+
+%%%%% Environment
+\NewEnviron{htabular}[1][]{%
+  \setcounter{htabular@hnum}{0}% reset headers number
+  \setcounter{htabular@lnum}{0}% reset headers number
+  \htabular@hmy=0pt%
+  \htabular@hmx=0pt%
+  \htabular@hmd=0pt%
+  \htabular@hmd=0pt%
+  \htabular@lmx=0pt%
+  \pgfkeys{/htabular/.cd,minimum header width,minimum label width,minimum cell size}% set defaults
+  \pgfkeys{/htabular/.cd,#1}% override defaults
+  %% symbols
+  \newcommand{\y}{%
+    \node[draw,minimum
+    size=\htabular@cellsize,fill=\htabular@colory,htabular cell] {};
+    \draw[fill=black,black] circle (1pt);
+  }%
+  \newcommand{\n}{%
+    \node[draw,minimum size=\htabular@cellsize,fill=\htabular@colorn,htabular cell] {};
+    \draw[black,line width=1pt] (225:2pt) -- (45:2pt);
+    \draw[black,line width=1pt] (135:2pt) -- (-45:2pt);
+  }%
+  \newcommand{\m}{%
+    \node[draw,minimum size=\htabular@cellsize,fill=\htabular@colorm,htabular cell] {};
+    \draw[fill=gray,gray] circle (1pt);
+  }%
+
+  %% header macro
+  \newcommand{\h}[1]{%
+    \node[text width=\htabular@cellsize] (H\arabic{htabular@hnum}) {};
+    \begin{scope}[overlay]
+
+      %% Compute from where to start writing the rotated text
+      \path[name path=A] (H\arabic{htabular@hnum}.north east) circle (.5\htabular@cellsize);
+      \path[name path=B] (H\arabic{htabular@hnum}.north east) -- +(150:\htabular@cellsize);
+      \path[name intersections={of=A and B,by=C}];
+
+      %% Draw rotated text node (g.<current number of g node>)
+      \pgfmathsetlength{\htabular@nodewidth}{max(\htabular@collabwidth,\widthof{##1~})}
+      \node[draw=none,inner sep=0,right,rotate=60,
+	    text width=\htabular@nodewidth]
+	  (g\arabic{htabular@hnum}) at (C) {##1~};
+      
+    \end{scope}
+    \addtocounter{htabular@hnum}{1}
+  }%
+  %% label macro
+  \newcommand{\la}[1]{%
+    \node {};
+    \pgfmathsetlength{\htabular@nodewidth}{max(\htabular@rowlabwidth,\widthof{##1})}
+    \node[right,minimum height=\htabular@cellsize,text width=\htabular@nodewidth] (L\arabic{htabular@lnum}) {##1};
+    \addtocounter{htabular@lnum}{1}
+  }%
+  %% legend
+  \newcommand{\legend}{%
+    \matrix (legend) at (A.south) [listing,anchor=north,column sep=0.5\htabular@cellsize]
+    {
+      ~ \& \y \& yes \& 
+	   \n \& no \& 
+	   \m \& maybe\\
+    };
+  }%
+\begin{tikzpicture}
+  \htabular@preactions
+  \matrix (A) [listing]
+  {
+    \BODY
+  };
+  %% Fix counters
+  \addtocounter{htabular@hnum}{-1}
+  \addtocounter{htabular@lnum}{-1}
+
+  %%%% Drawing headers borders
+  %% find the most top/right point to correctly draw column headers
+  \foreach \x in {0,1,...,\arabic{htabular@hnum}}
+  { 
+    \path (g\x.north east);
+    \pgfgetlastxy{\htabular@lx}{\htabular@ly}
+    \pgfmathsetlength{\global\htabular@hmy}{max(\htabular@hmy,\htabular@ly)}
+    
+    \path (g\x.south east);
+    \pgfgetlastxy{\htabular@lx}{\htabular@ly}
+    \pgfmathsetlength{\global\htabular@hmx}{max(\htabular@hmx,\htabular@lx)}
+
+    \path ($(g\x.south east) - (g\x.south west)$);
+    \pgfgetlastxy{\htabular@lx}{\htabular@ly}
+    \pgfmathsetlength{\global\htabular@hmd}{max(\htabular@hmd,veclen(\htabular@lx,\htabular@ly)}
+    
+    \path ($(g\x.north west) - (g\x.south east)$);
+    \pgfgetlastxy{\htabular@lx}{\htabular@ly}
+    \pgfmathsetlength{\global\htabular@hms}{max(\htabular@hms,veclen(\htabular@lx,0)}
+  }
+  \path[name path=vt]
+    let \p1 = (current bounding box.north west),
+    \p2 = ($(H\arabic{htabular@hnum}.north east) + (\htabular@hms,0)$)
+    in (\x1,\htabular@hmy) -- ($(\x2,\htabular@hmy)$);
+  
+  \pgfmathaddtolength{\htabular@hmd}{0.5\htabular@cellsize}
+  \foreach \x in {0,1,...,\arabic{htabular@hnum}}
+  { 
+    \coordinate (a) at ($(H\x.north west) + (0.5\pgflinewidth,0)$);
+    \coordinate (b) at ($(a) +(60:\htabular@hmd)$);
+    \path[name path=bl] (a) -- (b);
+    \path[name intersections={of=vt and bl,by=h1g\x}];
+    
+    \coordinate (c) at ($(H\x.north east) - (0.5\pgflinewidth,0)$);
+    \coordinate (d) at ($(c) +(60:\htabular@hmd)$);
+    \path[name path=bl2] (c) -- (d);
+    \path[name intersections={of=vt and bl2,by=h2g\x}];
+
+    \draw (a) -- (h1g\x) -- (h2g\x) -- (c);
+  }
+  
+  %%%% Drawing labels borders
+  \foreach \x in {0,1,...,\arabic{htabular@lnum}}
+  { 
+    \path ($(L\x.south east) - (L\x.south west)$);
+    \pgfgetlastxy{\htabular@lx}{\htabular@ly}
+    \pgfmathsetlength{\global\htabular@lmx}{max(\htabular@lmx,veclen(\htabular@lx,\htabular@ly)}
+  }
+  
+  \foreach \x in {0,1,...,\arabic{htabular@lnum}}
+  {
+    \coordinate (a) at ($(L\x.north west) - (0,0.5\pgflinewidth)$);
+    \coordinate (b) at ($(L\x.south west) + (0,0.5\pgflinewidth)$);
+    \draw let \p1 = (a), \p2 = (b)
+	  in (\x1,\y1) -- ++(\htabular@lmx,0) -- ($(\x1,\y2) + (\htabular@lmx,0)$) -- (\x1,\y2) -- cycle;
+  }
+  \legend % Add a legend
+  \htabular@postactions
+\end{tikzpicture}%
+}
+
+\endinput
