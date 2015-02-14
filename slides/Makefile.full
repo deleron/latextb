@@ -1,0 +1,52 @@
+##############################################################################
+# Tool to neatly compile LaTeX files
+# See README.md for usage
+##############################################################################
+
+NAME = $(notdir $(PWD))
+PDF = $(NAME).pdf
+
+BASE = slides
+
+BUILD_DIR=tmp.t2d
+
+STYLE_DIR=styles
+THEMES_DIR=themes
+FIGURES_DIR=figures
+BIB_DIR=bib
+PKG_DIR=packages
+DEP_DIR=src
+
+DEP_TEX = $(shell test -e $(DEP_DIR) && find `find $(DEP_DIR) -type d | sort -r` -maxdepth 1 -iname "*.tex")
+DEP = $(DEP_TEX) \
+      $(GENFIGURES) \
+      $(wildcard *.cls) \
+      $(wildcard $(PKG_DIR)/*.sty) \
+      $(wildcard $(BIB_DIR)/*.bib) \
+      $(wildcard $(FIGURES_DIR)/*)
+
+THEMES = $(wildcard $(THEMES_DIR)/*.tex)
+THEMES_DEP = $(THEMES:.tex=.pdf)
+
+TEXI2PDF = texi2pdf
+TEXI2DVI_FLAGS = --build-dir=$(BUILD_DIR) --batch
+TEXI2DVI_FLAGS += -I $(STYLE_DIR) -I $(THEMES_DIR) -I $(FIGURES_DIR) -I $(BIB_DIR) -I $(PKG_DIR) -I ./
+
+all: $(PDF)
+
+clean:
+	rm -f vc.info
+	rm -rf $(BUILD_DIR)
+	rm -rf $(THEMES_DEP)
+	rm -rf $(PDF)
+
+$(PDF): $(BASE).tex $(DEP) vc.info $(THEMES_DEP) 
+	PDFLATEX=xelatex $(TEXI2PDF) $(TEXI2DVI_FLAGS) -o $@ $<
+
+vc.info: $(DEP)
+	$(PWD)/bin/vc
+
+%.pdf: %.tex $(DEP) vc.info
+	PDFLATEX=xelatex $(TEXI2PDF) $(TEXI2DVI_FLAGS) -o $@ $<
+
+.PHONY: clean

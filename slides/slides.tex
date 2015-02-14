@@ -1,0 +1,57 @@
+%% Use `handout` option when printing presentation
+\documentclass[10pt]{beamer}
+
+%% NOTES handling
+
+%\usepackage{pgfpages}
+%\pgfpagesuselayout{2 on 1}[a4paper,border shrink=5mm]
+% Work around for xelatex/pgfpages compatbilities and beamer show notes
+%\renewcommand\pgfsetupphysicalpagesizes{\pdfpagewidth\pgfphysicalwidth\pdfpageheight\pgfphysicalheight}
+%\setbeamertemplate{note page}[plain]
+%\setbeameroption{show only notes}
+%\setbeameroption{show notes}
+
+%%%% Language handling
+
+\usepackage[english]{babel}
+\usepackage{fontspec} % Using xelatex
+\usepackage{eurosym}
+
+%%%% Theme : select appropriate options
+% - navsym : short navigation symbols
+% - exnavsym : extended navigation symbols
+% - nonavsym : no navigation symbols
+
+\usetheme[exnavsym]{lrde}
+
+%%%% Infos
+\title[FIXME - S. Title]{FIXME - Title}
+\subtitle[FIXME - S. Subtitle]{FIXME - Subtitle}
+\author[A. Name \& B. Name]{
+  Author A \textsc{Name}\inst{1} \and 
+  Author B \textsc{Name}\inst{1}\inst{2}
+}
+\institute[Inst 1 \& Inst 2]{
+    \inst{1}Inst 1:  \href{mailto:a.name@institute.fr}{a.name@institute1.fr} \and
+    \inst{2}Inst 2: \href{mailto:b.name@institute.fr}{b.name@institute2.fr} \and
+}
+\date{FIXME - date}
+
+\titlegraphic{
+  \includegraphics[width=1.0cm]{fig/logo1.eps}
+  \hspace{1cm}
+  \includegraphics[width=1.0cm]{fig/logo2.eps}
+  \hspace{1cm}
+  \includegraphics[width=1.0cm]{fig/logo3.eps}
+}
+
+\bibliography{slides}
+
+\input{vc.info}
+
+%%%% document
+\begin{document}
+
+\input{src/content}
+
+\end{document}

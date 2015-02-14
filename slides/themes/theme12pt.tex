@@ -1,0 +1,40 @@
+\documentclass[12pt]{beamer}
+
+\usepackage[french]{babel}
+\usepackage{fontspec} % Using xelatex
+\usepackage{eurosym}
+
+\definecolor{isirdarkred}{rgb}{0.8,0,0}
+\setbeamercolor{structure}{fg=isirdarkred}
+\usetheme{lrde}
+
+%%%% infos
+\title[FIXME - S. Title]{FIXME - Title}
+\subtitle[FIXME - S. Subtitle]{FIXME - Subtitle}
+\author[A. Name \& B. Name]{
+  Author A \textsc{Name}\inst{1} \and 
+  Author B \textsc{Name}\inst{1}\inst{2}
+}
+\institute[Inst 1 \& Inst 2]{
+    \inst{1}Inst 1:  \href{mailto:a.name@institute.fr}{a.name@institute1.fr} \and
+    \inst{2}Inst 2: \href{mailto:b.name@institute.fr}{b.name@institute2.fr} \and
+}
+\date{FIXME - date}
+
+%%%% document
+\begin{document}
+
+\begin{frame}[fragile]
+  \frametitle{Theming}
+  \framesubtitle{Different colors}
+
+  \begin{verbatim}
+    \documentclass[12pt]{beamer}
+    ...
+    \usetheme{lrde}  
+    ...
+  \end{verbatim}
+
+\end{frame}
+
+\end{document}

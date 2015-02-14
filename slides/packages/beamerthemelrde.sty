@@ -1,0 +1,373 @@
+\RequirePackage{pgf,tikz}
+\RequirePackage{calc}
+
+\usecolortheme{isir}
+
+%% Dimension variables
+\newlength\beamer@sidebarwidth
+\newlength\beamer@footlinewidth
+
+%% Defaults options
+\def\beamer@navigation{nonavsym}
+
+%% Options mechanism
+\DeclareOptionBeamer{navsym}{\def\beamer@navigation{navsym}} % short navigation symbols
+\DeclareOptionBeamer{exnavsym}{\def\beamer@navigation{exnavsym}} % complete navigation
+\DeclareOptionBeamer{nonavsym}{\def\beamer@navigation{nonavsym}} % no navigation
+
+\ProcessOptionsBeamer
+
+%% Text defintions (for ifx use)
+\def\beamer@textnonavsym{nonavsym}
+\def\beamer@textnavsym{navsym}
+\def\beamer@textexnavsym{exnavsym}
+
+%% Font 
+\usefonttheme{professionalfonts}
+
+% Compute background info
+\def\backgroundtemplateNoSideBar{}
+
+\usebeamerfont{sidebar}\setlength{\beamer@sidebarwidth}{1.5em}
+\usebeamerfont{footline}\setlength{\beamer@footlinewidth}{1.3em}
+
+\def\backgroundtemplateFull{
+  \begin{tikzpicture}{0cm}{0cm}{\the\paperwidth}{\the\paperheight}
+    
+    %% background
+    {
+      \usebeamercolor[bg]{block body}
+      \pgfpathmoveto{\pgfpoint{0cm}{0cm}}
+      \pgfpathlineto{\pgfpoint{0cm}{\paperheight}}
+      \pgfpathlineto{\pgfpoint{1.2\beamer@sidebarwidth}{\paperheight}}
+      \pgfpathlineto{\pgfpoint{1.2\beamer@sidebarwidth}{0.33\paperheight}}
+      \pgfpathcurveto{\pgfpoint{1.2\beamer@sidebarwidth}{1.2\beamer@footlinewidth}}
+		     {\pgfpoint{3.25\beamer@sidebarwidth}{1.2\beamer@footlinewidth}}
+		     {\pgfpoint{4\beamer@sidebarwidth}{1.2\beamer@footlinewidth}}
+      \pgfpathlineto{\pgfpoint{\paperwidth}{1.2\beamer@footlinewidth}}
+      \pgfpathlineto{\pgfpoint{\paperwidth}{0}}
+      \pgfpathclose
+      \pgfusepath{fill}
+    }
+
+    %% sidebar
+    {
+      \usebeamercolor[fg]{structure}
+      \pgfpathmoveto{\pgfpoint{0cm}{0cm}}
+      \pgfpathlineto{\pgfpoint{0cm}{\paperheight}}
+      \pgfpathlineto{\pgfpoint{\beamer@sidebarwidth}{\paperheight}}
+      \pgfpathlineto{\pgfpoint{\beamer@sidebarwidth}{0.33\paperheight}}
+      \pgfpathcurveto{\pgfpoint{\beamer@sidebarwidth}{0.11\paperheight}}
+		     {\pgfpoint{1.25\beamer@sidebarwidth}{0.75\beamer@sidebarwidth}}
+		     {\pgfpoint{2\beamer@sidebarwidth}{0cm}}
+      \pgfpathclose
+      \pgfusepath{fill}
+    }
+
+    %% page counter
+    {
+    \usebeamerfont{footline}
+    \usebeamercolor[fg]{structure}
+    \pgfpathmoveto{\pgfpoint{\paperwidth}{0}}
+    \pgfpathlineto{\pgfpoint{\paperwidth}{\beamer@footlinewidth}}
+    \pgfpathcurveto{\pgfpoint{\paperwidth - 10pt}{\beamer@footlinewidth}}
+		   {\pgfpoint{\paperwidth - 25pt}{\beamer@footlinewidth}}
+		   {\pgfpoint{\paperwidth - 30pt}{0}}
+    \pgfpathclose
+    \pgfusepath{fill}
+    }
+  \end{tikzpicture}
+}
+%% Background curve
+\usebackgroundtemplate{\backgroundtemplateFull}
+
+\useheadtemplate{}
+\usefoottemplate{}
+
+%% Size
+\RequirePackage{relsize}
+
+%% Frametitles
+\beamertemplatelargeframetitle
+  %\setbeamerfont{frametitle}{size={\fontsize{16}{18}}}
+
+%% Lists
+\setbeamertemplate{enumerate item}{\color{structure}\insertenumlabel$)$}
+\setbeamertemplate{enumerate subitem}{\smaller\color{structure}\insertsubenumlabel$)$}
+\setbeamertemplate{enumerate subsubitem}{\smaller\color{structure}\insertsubsubenumlabel$)$}
+
+\setbeamertemplate{itemize items}{
+  \begin{tikzpicture}
+    \draw[draw=none] (0,0) rectangle (0.8em,0.8em);
+    \draw[fill=structure,draw=none] (0.2em,0.2em) rectangle (0.6em,0.6em);
+  \end{tikzpicture}
+}
+
+\setbeamerfont{itemize/enumerate body}{}
+\setbeamerfont{itemize/enumerate subbody}{size=\smaller}
+\setbeamerfont{itemize/enumerate subsubbody}{size=\smaller}
+
+%% Blocks
+
+\setbeamerfont{block title}{size=\normalsize}
+\setbeamerfont{block title alerted}{size=\normalsize}
+\setbeamerfont{block title example}{size=\normalsize}
+
+%% Quotes
+
+\setbeamersize{text margin left=0.5cm,text margin right=0.5cm}
+
+%% Sidesbar
+
+\def\beamer@sidebarformat#1#2#3{
+  \begin{beamercolorbox}[wd=\beamer@sidebarwidth,leftskip=#1,rightskip=1ex plus1fil,vmode]{#2}
+    \vbox{}
+    #3\par
+    \vbox{}
+    \vskip-1.5ex
+  \end{beamercolorbox}
+}
+
+\setbeamersize{sidebar width left=\beamer@sidebarwidth}
+\defbeamertemplate*{sidebar left}{sidebar theme}
+{
+  \beamer@tempdim=\beamer@sidebarwidth
+  \advance\beamer@tempdim by -6pt
+
+  \vskip0.2cm
+
+  \usebeamercolor[fg]{title in sidebar}
+  \begin{tikzpicture}
+    \draw node[minimum height=\beamer@sidebarwidth,rotate=90,anchor=base] {\insertshorttitle[center,respectlinebreaks]};
+  \end{tikzpicture}
+
+  \vskip1.0cm
+      
+  \usebeamercolor[fg]{author in sidebar}
+  \begin{tikzpicture}
+    \draw node[minimum height=\beamer@sidebarwidth,rotate=90,anchor=base] {\insertshortauthor};
+  \end{tikzpicture}
+  \vfill
+}
+
+%% Title page
+
+\defbeamertemplate*{title page}{customized}[1][]
+{
+  \vbox{}
+  \vfill
+  \begin{centering}
+    \begin{beamercolorbox}[sep=8pt,center,#1]{title}
+      \usebeamerfont{title}\inserttitle\par%
+      \ifx\insertsubtitle\@empty%
+      \else%
+        \vskip0.25em%
+        {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}%
+      \fi%     
+    \end{beamercolorbox}%
+    \vskip0.4em\par
+    \begin{beamercolorbox}[sep=8pt,center,#1]{author}
+      \usebeamerfont{author}\insertauthor
+    \end{beamercolorbox}
+    \begin{beamercolorbox}[sep=8pt,center,#1]{institute}
+      \usebeamerfont{institute}\insertinstitute
+    \end{beamercolorbox}
+    \begin{beamercolorbox}[sep=8pt,center,#1]{date}
+      \usebeamerfont{date}\insertdate
+    \end{beamercolorbox}\vskip0.3em
+    {\usebeamercolor[fg]{titlegraphic}\inserttitlegraphic\par}
+  \end{centering}
+  \vfill
+}
+
+%% Navigation
+
+\beamer@compresstrue
+
+\def\insertsectionnavigationhorizontal#1#2#3{%
+   \def\slideentry##1##2##3##4##5##6{}%
+   #2
+   \hskip.3cm%
+   \usebeamerfont{section in head/foot}\usebeamercolor[fg]{section in head/foot}%
+   \makebox{%
+   \hskip-1.875ex plus-1fill\dohead%
+   \box\beamer@sectionbox}#3}
+
+\setbeamertemplate{navigation symbols}{}
+\def\setnavigation#1{%
+\ifx\beamer@navigation\beamer@textnavsym%
+  \usebeamercolor[fg]{navigation symbols}
+  \insertslidenavigationsymbol
+  \insertsectionnavigationsymbol
+  \insertdocnavigationsymbol
+  \insertbackfindforwardnavigationsymbol
+\else\ifx\beamer@navigation\beamer@textexnavsym%
+\insertsectionnavigationhorizontal{#1}%
+\fi\fi%
+}
+
+
+
+%% Footlines
+\setbeamertemplate{footline}{%
+\begin{tikzpicture}[overlay, remember picture,every node/.style={inner sep=0,text height=1.2em}]
+  \node[above] at (0.5\paperwidth,0em) {\setnavigation{\textwidth}};%
+  \node[above,right] at (2\beamer@sidebarwidth,0.8em) {\usebeamercolor[fg]{institute in head/foot}\insertshortinstitute};%
+  \node[above,left] at (\paperwidth,0.8em) {\usebeamerfont{footline}\color{structure.bg}\insertframenumber\hspace{0.1em}/\hspace{0.1em}\inserttotalframenumber};%
+\end{tikzpicture}%
+}%
+
+%% Test
+
+\def\insertverticalnavigation#1{%
+  \vbox{%
+    \def\sectionentry##1##2##3##4##5{%
+      \ifnum##5=\c@part%
+      \def\insertsectionhead{##2}%
+      \def\insertsectionheadnumber{##1}%
+      \def\insertpartheadnumber{##5}%
+      \hbox{{%
+        \usebeamerfont{section in sidebar}\usebeamercolor[fg]{section in sidebar}%
+          \hyperlink{Navigation##3}{%
+          \ifnum\c@section=##1%
+            \ifnum\c@subsection=0\relax%
+              {\usebeamertemplate{section in sidebar}}%
+            \else%
+              \ifx\beamer@nav@css\beamer@hidetext%
+                {\usebeamertemplate{section in sidebar}}%
+              \else%
+                {\usebeamertemplate{section in sidebar shaded}}%
+              \fi%
+            \fi%
+          \else
+            {\usebeamertemplate{section in sidebar shaded}}%
+          \fi}}}%
+      \beamer@currentsubsection=0\relax\fi}%
+    \def\slideentry##1##2##3##4##5##6{}%
+    \def\beamer@subsectionentry##1##2##3##4##5{%
+      \ifnum##1=\c@part%
+      \def\insertpartheadnumber{##1}%
+      \def\insertsectionheadnumber{##2}%
+      \def\insertsubsectionheadnumber{##3}%
+      \def\insertsubsectionhead{##5}%
+       \beamer@tocifnothide{\ifnum\c@section=##2\ifnum\c@subsection=##3\beamer@nav@css\else\beamer@nav@oss\fi\else\beamer@nav@ooss\fi}%
+      {\hbox{{%
+        \usebeamerfont{subsection in sidebar}\usebeamercolor[fg]{subsection in sidebar}%
+          \hyperlink{Navigation##4}{%
+          \ifnum\c@section=##2%
+            \ifnum\c@subsection=##3%
+              %\ifnum\c@subsubsection=0\relax%
+                {\usebeamertemplate{subsection in sidebar}}%
+              %\else%
+              %  {\usebeamertemplate{subsection in sidebar shaded}}%
+              %\fi%
+            \else%
+              {\usebeamertemplate{subsection in sidebar shaded}}%
+            \fi%
+          \else%
+            {\usebeamertemplate{subsection in sidebar shaded}}%
+          \fi}}}%
+      }%
+      \fi}%
+    \def\beamer@subsubsectionentry##1##2##3##4##5##6{%
+    }
+    %\beamer@currentsubsection=0\relax%
+    \dohead%
+  }%
+}
+
+\setbeamertemplate{bibliography item}[article]
+\setcounter{tocdepth}{2}
+
+\usepackage[url=false,
+	    doi=false,
+	    uniquename=false,
+	    uniquelist=false,
+	    bibstyle=authoryear,
+	    citestyle=authoryear-comp,
+	    texencoding=utf8,bibencoding=utf8,
+	    maxnames=2,
+	    hyperref=true]{biblatex}
+
+\newcommand{\updatebitem}{
+  \ifthenelse{\equal{\thefield{entrytype}}{book}%
+     \or\equal{\thefield{entrytype}}{booklet}%
+     \or\equal{\thefield{entrytype}}{collection}%
+     \or\equal{\thefield{entrytype}}{manual}%
+     \or\equal{\thefield{entrytype}}{periodical}%
+     \or\equal{\thefield{entrytype}}{proceedings}%
+     \or\equal{\thefield{entrytype}}{thesis}}%
+     {\setbeamertemplate{bibliography item}[book]}%
+     {\setbeamertemplate{bibliography item}[article]}%
+}
+
+% Format for fullcite (s.t. only lastname is displayed)
+\DeclareNameFormat{lrde}{%
+  \iffirstinits
+    {\usebibmacro{name:first-last}{#1}{}{#5}{#7}}
+    {\usebibmacro{name:first-last}{#1}{}{#5}{#7}}%
+  \usebibmacro{name:andothers}}
+
+\DeclareCiteCommand{\fullcite}
+  {\usebibmacro{prenote}}
+  {
+    \updatebitem
+    \usebeamertemplate{bibliography item}
+    \usedriver
+     {\DeclareNameAlias{sortname}{lrde}}
+   {\thefield{entrytype}}
+  }
+  {\multicitedelim}
+  {\usebibmacro{postnote}}
+
+\defbibenvironment{bibliography}{
+  \smaller
+  \begin{itemize}
+}{
+  \end{itemize}
+}{
+  \updatebitem
+  \item[\usebeamertemplate{bibliography item}]
+}
+
+\makeatletter
+
+\pretocmd{\abx@macro@author}{\usebeamercolor[fg]{bibliography entry author}}{}{}
+\pretocmd{\abx@macro@editor}{\usebeamercolor[fg]{bibliography entry author}}{}{}
+\pretocmd{\abx@macro@title}{\printtext{\strut}\newblock\usebeamercolor[fg]{bibliography entry title}}{}{}
+\apptocmd{\abx@macro@title}{\printtext{\strut}\newblock\usebeamercolor[fg]{bibliography entry note}}{}{}
+
+\AtBeginPart{%
+  \beamer@tocsectionnumber=0\relax
+  \setcounter{section}{0}
+}
+
+%% FIX noframenumbering not working with allowframebreaks (e.g. in printbibliography)
+\preto{\appendix}{\patchcmd{\beamer@continueautobreak}{\refstepcounter{framenumber}}{}{}{}}
+
+%% Provide a block without margins
+\newenvironment<>{refs}
+{\actionenv#1%
+  \usebeamertemplate{quote begin}%
+  \usebeamerfont{quote}%
+  \usebeamercolor{quote}%
+  \list{}{
+    \rightmargin 0.5em  \leftmargin 0.5em}%
+\item\relax}
+{\endlist\usebeamertemplate{quote end}\endactionenv}
+
+%% Handling notes
+\renewcommand{\insertslideintonotes}[1]{{%
+  \begin{pgfpicture}{0cm}{0cm}{#1\paperwidth}{#1\paperheight}
+    \begin{pgflowlevelscope}{\pgftransformscale{#1}}%
+      \usebeamercolor[bg]{background}
+      \pgfpathrectangle{\pgfpointorigin}{\pgfpoint{\paperwidth}{\paperheight}}
+      \pgfusepath{fill}
+      \color{black}
+      {\pgftransformshift{\pgfpoint{\beamer@origlmargin}{\footheight}}\pgftext[left,bottom]{\copy\beamer@frameboxcopy}}
+    \end{pgflowlevelscope}
+  \end{pgfpicture}%
+  }}
+\makeatother
+
+\mode<all>

@@ -1,0 +1,221 @@
+\begin{frame}
+  \maketitle
+  
+  % GIT useful infos
+  \vfill {\tiny \color{white} GIT: \GITAbrHash{} - \GITCommitterDate{}}
+\end{frame}
+
+\section{Introduction}
+
+\begin{frame}
+  blabla about the theme and options
+\end{frame}
+
+\begin{frame}
+  \tableofcontents
+\end{frame}
+
+\section{Theming}
+
+\newcommand{\showtheme}[1]{
+  \thispagestyle{empty}
+  \begin{frame}
+    \IfFileExists{themes/#1.pdf}{
+	\pgfdeclareimage{theme}{themes/#1}
+	\begin{tikzpicture}[remember picture, overlay]
+	  \node at (current page.center) {\pgfuseimage{theme}};
+	\end{tikzpicture}
+    }{
+      \textit{themes/#1.pdf does not exist}
+      
+      To generate it use
+      \begin{quote}
+	make -f Makefile.full
+      \end{quote}
+    }
+  \end{frame}
+}
+
+\showtheme{themenonavsym}
+\showtheme{themenavsym}
+\showtheme{themeexnavsym}
+\showtheme{themecolor}
+\showtheme{theme12pt}
+	  
+\section[Section]{Section Example}
+\begin{frame}[fragile]
+  \frametitle{Frame title}
+  \framesubtitle{Frame subtitle}
+
+  Itemize:
+  \begin{itemize}
+    \item item 1
+      \begin{itemize}
+	\item sub-item 1
+	\item sub-item 2
+	  \begin{itemize}
+	    \item sub-sub-item 1
+	    \item sub-sub-item 2
+	  \end{itemize}
+      \end{itemize}
+    \item item 2
+  \end{itemize}
+  
+  \footnotesize
+  Using smaller font (\verb+\footnotesize+):
+  \begin{itemize}
+    \item item 1
+      \begin{itemize}
+	\item sub-item 1
+	\item sub-item 2
+	  \begin{itemize}
+	    \item sub-sub-item 1
+	    \item sub-sub-item 2
+	  \end{itemize}
+      \end{itemize}
+    \item item 2
+  \end{itemize}
+
+\end{frame}
+
+\subsection[Subsection]{Subsection Example}
+\begin{frame}
+  \frametitle{Frame title}
+  \framesubtitle{Frame subtitle}
+  
+  Enumerate:
+  \begin{enumerate}
+    \item item 1
+      \begin{enumerate}
+	\item sub-item 1
+	\item sub-item 2
+	  \begin{enumerate}
+	    \item sub-sub-item 1
+	    \item sub-sub-item 2
+	  \end{enumerate}
+      \end{enumerate}
+    \item item 2
+  \end{enumerate}
+\end{frame}
+
+\subsection[A. Subsection]{Another Subsection Example}
+\begin{frame}
+  \frametitle{Frame title}
+  \framesubtitle{Frame subtitle}
+
+  \begin{theorem}
+    Theorem content
+  \end{theorem}
+
+  \begin{corollary}
+    Corollary content
+  \end{corollary}
+
+  \begin{definition}
+    Definition content
+  \end{definition}
+\end{frame}
+
+\subsubsection[Subsubsection]{Subsubsection Example}
+\begin{frame}
+  \frametitle{Frame title}
+  \framesubtitle{Frame subtitle}
+
+  \begin{quote}
+    Nice quotation
+  \end{quote}
+
+  \vspace{1em}
+  
+  Citations: 
+  \begin{itemize}
+    \item \cite{test2010, test2013, test2011}
+    \item \scriptsize\fullcite{test2013, test2011b}
+  \end{itemize}
+
+  \begin{refs}
+    \scriptsize\fullcite{phdthesis1999}
+  \end{refs}
+
+\end{frame}
+
+\section[A. Section]{Another section Example}
+\begin{frame}
+  \frametitle{Contents}
+  \tableofcontents[%
+    currentsection, % causes all sections but the current to be shown in a semi-transparent way.
+    % currentsubsection, % causes all subsections but the current subsection in the current section to ...
+    % hideallsubsections, % causes all subsections to be hidden.
+    % hideothersubsections, % causes the subsections of sections other than the current one to be hidden.
+    % part=, % part number causes the table of contents of part part number to be shown
+    % pausesections, % causes a \pause command to be issued before each section. This is useful if you
+    % pausesubsections, %  causes a \pause command to be issued before each subsection.
+    % sections={ overlay specification },
+  ]
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Frame title}
+  \framesubtitle{Frame subtitle}
+
+  \begin{block}{Block title}
+    block content
+  \end{block}
+
+  \begin{alertblock}{Alert Block title}
+    block content
+  \end{alertblock}
+  
+  \begin{example}
+    block content
+  \end{example}
+  
+\end{frame}
+
+\subsection[Y. A. Subsection]{Yet Another Subsection Example}
+\begin{frame}
+  \frametitle{Frame title}
+  \framesubtitle{Frame subtitle}
+
+  \emph{Emphasis}
+
+  \vspace{1em}
+
+  \textbf{Textbf}
+  
+  \vspace{1em}
+
+  \textit{Textit}
+  
+  \vspace{1em}
+
+  $\text{math environ}: f(x) = \sum_{i=0}^N x^2$
+
+\end{frame}
+
+
+\begin{frame}[allowframebreaks]
+  \frametitle{\bibname}
+
+  \printbibliography
+\end{frame}
+
+\begin{frame}
+\end{frame}
+\begin{frame}
+\end{frame}
+\begin{frame}
+\end{frame}
+\begin{frame}
+\end{frame}
+\begin{frame}
+\end{frame}
+\begin{frame}
+\end{frame}
+
+
+\begin{frame}[noframenumbering]
+
+  Frame not counting in numbering
+\end{frame}

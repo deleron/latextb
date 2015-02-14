@@ -1,0 +1,49 @@
+\documentclass[10pt]{beamer}
+
+\usepackage[french]{babel}
+\usepackage{fontspec} % Using xelatex
+\usepackage{eurosym}
+
+\usetheme[exnavsym]{lrde}
+
+%%%% infos
+\title[FIXME - S. Title]{FIXME - Title}
+\subtitle[FIXME - S. Subtitle]{FIXME - Subtitle}
+\author[A. Name \& B. Name]{
+  Author A \textsc{Name}\inst{1} \and 
+  Author B \textsc{Name}\inst{1}\inst{2}
+}
+\institute[Inst 1 \& Inst 2]{
+    \inst{1}Inst 1:  \href{mailto:a.name@institute.fr}{a.name@institute1.fr} \and
+    \inst{2}Inst 2: \href{mailto:b.name@institute.fr}{b.name@institute2.fr} \and
+}
+\date{FIXME - date}
+
+%%%% document
+\begin{document}
+
+\section{Section 1}
+\section{Section 2}
+\subsection{Sub section 1}
+\subsection{Sub section 2}
+
+\begin{frame}[fragile]
+  \frametitle{Theming}
+  \framesubtitle{Option exnavsym}
+
+  \begin{verbatim}
+    \documentclass[10pt]{beamer}
+    ...
+    \usetheme[exnavsym]{lrde}  
+    ...
+  \end{verbatim}
+
+\end{frame}
+
+\subsection{Sub section 3}
+\section{Section 3}
+
+\begin{frame}
+\end{frame}
+
+\end{document}
