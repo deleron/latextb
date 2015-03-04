@@ -2,6 +2,8 @@
 
 A package dedicated to YES/NO/MAYBE tables with long headers.
 
+![image of output](sample/htabular.png?raw=true "Screenshot of an htabular")
+
 ### Options
 
 * `colors` Uses predefined green/red/gray color scheme
