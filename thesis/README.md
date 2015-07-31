@@ -14,7 +14,7 @@ sudo apt-get install texinfo texlive texlive-xetex texlive-latex-extra biblatex
 Some additional packages are required to take full advantage of this class, and
 may be retrieved with the following command (e.g. on ubuntu)
 ```
-sudo apt-get gawk
+sudo apt-get install gawk
 ```
 
 ### Basic usage
